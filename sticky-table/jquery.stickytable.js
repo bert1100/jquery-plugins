@@ -1,16 +1,14 @@
 /* 
     chsiStickyTable - A jQuery plugin
     ==================================================================
-    ©author  weij  - Version 1.0.0
+    ©author  weij  - Version 1.0.1
     ==================================================================
     This program is build for chsi-sticky-table. it's compatibility is ie 7+.
     you shoud have to require the chsi-sticky-table.css and using correctly  html Dom.
 */
-
 (function($){
     $.fn.extend({ 
         chsiStickyTable: function() {
-
             function StickyTable(ele){
                     this.ele = $(ele);
                     this.stickyTable = this.ele.find("div.sticky-table").eq(0);
@@ -39,6 +37,9 @@
                     };
                     this.setHeigthWidth= function(){
                         // 设置相应的高度或者宽度
+                        this.stickyTable.css("overflow","hidden");
+                        this.HeaderTable.parent("div.chsi-table-header").removeAttr("style");
+                        this.BodyTable.parent("div.chsi-table-body").removeAttr("style");
                         // 设置scrollDiv的高度
                         var _h = this.ele.outerHeight()-this.HeaderTable.outerHeight();
                         this.BodyTable.parent("div.chsi-table-body").height(_h);
@@ -52,8 +53,8 @@
                         this.fixedTableBody.height(_h+1-this.getScrollbarWidth);
                         // 根据横向滚动条填充一个空的div宽度，修复滚动条同步的问题
                         var _w_real = this.HeaderTable.width();
-                        this.stuffDiv.width(_w_real+this.getScrollbarWidth).height(1);
-                        this.HeaderTable.before(this.stuffDiv);
+                        this.stuffDiv.addClass("stuff-div").css("margin-top","-1px").width(_w_real+this.getScrollbarWidth).height(1);
+                        this.HeaderTable.after(this.stuffDiv);
                     };
                     this.amountEvent = function(){
                         var _this = this;
@@ -83,7 +84,36 @@
             return this.each(function() {
             new StickyTable(this);   
             }); // init
-        } // chsiStickyTable end
+        }, // chsiStickyTable end
+
+    chsiLegacyTable:function(){
+        function LegacyTable(ele){
+            this.ele = $(ele);
+            this.stickyTable = this.ele.find("div.sticky-table").eq(0);
+            this.HeaderTable =  this.stickyTable.find("div.chsi-table-header table").eq(0);
+            this.BodyTable = this.stickyTable.find("div.chsi-table-body table").eq(0);
+            // 计算浏览器的滚动条（因为各个浏览器不一致）
+            this.getScrollbarWidth=(function(){
+                var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>'); 
+                    $('body').append(div); 
+                    var w1 = $('div', div).innerWidth(); 
+                    div.css('overflow-y', 'scroll'); 
+                    var w2 = $('div', div).innerWidth(); 
+                    $(div).remove(); 
+                    return (w1 - w2); 
+            })();
+            this.stickyTable.find("div.chsi-table-fixed").remove();
+            this.stickyTable.find("div.stuff-div").remove();
+            this.HeaderTable.parent("div.chsi-table-header").width(this.HeaderTable.outerWidth()+this.getScrollbarWidth);
+            this.BodyTable.parent("div.chsi-table-body").width(this.BodyTable.outerWidth()+this.getScrollbarWidth);
+            this.BodyTable.parent("div.chsi-table-body").height(this.BodyTable.outerHeight()+this.getScrollbarWidth).css("overflow","hidden");
+            this.stickyTable.css("overflow","auto");
+
+            return this;
+        }
+
+        return this.each(function(){ new LegacyTable(this);  });
+    }
     }); // extend
     
 })(jQuery);
