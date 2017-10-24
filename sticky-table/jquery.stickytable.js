@@ -44,8 +44,8 @@
                         this.BodyTable.parent("div.chsi-table-body").height(_h);
                         // 设置固定列的宽度
                         var _w_fixed = 0;
-                        this.HeaderTable.find("col.fixed").each(function(){
-                            _w_fixed += $(this).width();
+                        this.HeaderTable.find("colgroup>col.fixed").each(function(){
+                             _w_fixed += parseInt($(this).attr("width"));
                         });
                         this.fixedTableWrapper.width(_w_fixed);
                         // 设置固定列中tableBody的高度
