@@ -13,7 +13,8 @@
 <script src="jquery.stickytable.js"></script> 
 <script>
   $(function(){
-           $(".sticky-table-wrapper").chsiStickyTable();
+           $(".sticky-table-wrapper").chsiStickyTable(); // 现代模式
+           $("#tolegacy").chsiLegacyTable(); // 经典模式
         });
 </script>
 ...
