@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮询框架测试</title>
+    <script src="https://t1.chei.com.cn/common/jquery/1.8.3/jquery.min.js"></script>
+    <script src="polling.js"></script>
+</head>
+<body>
+    testing!
+<div id="SDFAFAEIWE2"></div>
+    <script>
+        var polling = new AjaxPolling('SDFAFAEIWE2', 'key', 'http://localhost:3000/users/',{"useProgressBar":true}); 
+        // 设置当轮询完成并结束时回调
+        polling.onSuccess = function(data){
+            // console.log(data)
+            alert('轮询完成');
+        }
+        polling.onError = function(xhr,retryCount){
+            console.log(xhr.status)
+            alert("error!")
+        }
+        polling.start();
+    </script>
+</body>
+</html>
