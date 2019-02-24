@@ -1,9 +1,9 @@
 /**
  * 轮询公用库，仅限jquery版使用！
- * @param {[type]} taskId    [description]
- * @param {[type]} key       [description]
- * @param {[type]} serverUrl [description]
- * @param {[type]} options   [description]
+ * @param {[type]} taskId    [进入轮询框架的任务id, required]
+ * @param {[type]} key       [附加参数key，可以为空, not required]
+ * @param {[type]} serverUrl [轮询url, required]
+ * @param {[type]} options   [轮询过程的配置项：delay[轮询间隔]、delayGaps[轮询递增毫秒数]、retryLimit[发送错误时的尝试总次数]、retryAfter[发送错误时第一次重试的时间间隔]、retryGaps[发送错误时重试请求递增毫秒数]]
  */
 function AjaxPolling(taskId, key, serverUrl, options) {
     this.taskId = taskId;
@@ -73,7 +73,7 @@ AjaxPolling.prototype = {
                     return p.onException && p.onException(data);
 
                 }
-                console.log('error:服务没有正确返回结果');
+                // console.log('error:服务没有正确返回结果');
                 return;
                
             }
